@@ -2,10 +2,55 @@ package com.nandaiqbalh.counterwithviewmodel
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.nandaiqbalh.counterwithviewmodel.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+
+    private var _binding: ActivityMainBinding? = null
+    private val binding get() = _binding!!
+
+    private var mCounter: Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        _binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        // without view model
+        withoutViewModel()
+
+
+        // with view model
+    }
+
+    private fun withoutViewModel(){
+        binding.btnPlus.setOnClickListener {
+            mIncrementCount()
+        }
+
+        binding.btnMinus.setOnClickListener {
+            mDecrementCount()
+            updateUI()
+        }
+    }
+
+    private fun mIncrementCount(){
+        mCounter += 1
+        updateUI()
+    }
+
+    private fun mDecrementCount(){
+        mCounter.let {
+            if (it > 0) mCounter -= 1
+        }
+    }
+
+    private fun updateUI(){
+        binding.tvCount.text = mCounter.toString()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }
