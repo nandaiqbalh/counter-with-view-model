@@ -2,6 +2,9 @@ package com.nandaiqbalh.counterwithviewmodel
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.viewModels
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.nandaiqbalh.counterwithviewmodel.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -11,16 +14,40 @@ class MainActivity : AppCompatActivity() {
 
     private var mCounter: Int = 0
 
+    private val viewModel : MainViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         // without view model
-        withoutViewModel()
-
+//        withoutViewModel()
 
         // with view model
+        withViewModel()
+    }
+
+    private fun withViewModel(){
+        binding.btnPlus.setOnClickListener {
+            wIncrementCount()
+        }
+
+        binding.btnMinus.setOnClickListener {
+            wDecrementCount()
+        }
+
+        viewModel.vCounter.observe(this){ result ->
+            binding.tvCount.text = result.toString()
+        }
+    }
+
+    private fun wIncrementCount(){
+        viewModel.incrementCount()
+    }
+
+    private fun wDecrementCount(){
+        viewModel.decrementCount()
     }
 
     private fun withoutViewModel(){
